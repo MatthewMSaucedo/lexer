@@ -178,12 +178,27 @@ void DFA_Alpha(LexerState* lexerState)
      * TODO
      * Implement this function
      * */
-
-    // TODO: Remove the below message after your implementation
+	int i = 0;
+	char c, lexeme[MAX_LEXEME_LENGTH + 1];
+	
+	// while the next char is alphanumeric or a digit
+	// .. we must consider it as one lexeme
+	for (i = 1, c = lexerState->sourceCode[lexerState->charInd]; 
+		isalpha(c) || isdigit(c);
+		i++, c = lexerState->sourceCode[lexerState->charInd])
+	{
+		// increment charInd
+		lexerState->charInd++;
+			
+		// store as lexeme
+		lexeme[i-1] = c;
+	}
+	
+	// TODO: Remove the below message after your implementation
     // Until implementing, let's just consume the current character and return.
-    char c = lexerState->sourceCode[lexerState->charInd];
+    //char c = lexerState->sourceCode[lexerState->charInd];
 
-    printf("DFA_Alpha: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
+    //printf("DFA_Alpha: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
 
     // The character was consumed (by ignoring). Advance to the next character.
     lexerState->charInd++;
