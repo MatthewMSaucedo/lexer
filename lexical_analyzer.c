@@ -194,6 +194,18 @@ void DFA_Alpha(LexerState* lexerState)
 		lexeme[i-1] = c;
 	}
 	
+	// terminate lexeme
+	lexeme[i] = '\0';
+	
+	// check is lexeme is less than 11 characters
+	if ( i > 11)
+		{
+			// fill LexerState error and return
+			lexerState->lexerError = NAME_TOO_LONG;
+			return;
+		}
+	
+	
 	// TODO: Remove the below message after your implementation
     // Until implementing, let's just consume the current character and return.
     //char c = lexerState->sourceCode[lexerState->charInd];
