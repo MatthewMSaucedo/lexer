@@ -326,15 +326,58 @@ void DFA_Special(LexerState* lexerState)
      * TODO
      * Implement this function
      * */
-
+	
+	int i = 1, exit = 0, reservedToken;
+	char c, lexeme[MAX_LEXEME_LENGTH + 1];
+	
+	
+	if (lexerState->sourceCode[lexerState->charInd] == '/')
+	{
+		//check to see if there is a following asterisk
+		if (lexerState->sourceCode[lexerState->charInd + 1] == '*')
+		{
+			lexerState->charInd++;
+			
+			// we need to move forward until we see a terminating */
+			while (exit == 0)
+			{
+				lexerState->charInd++;
+				
+				// check for an additional asterisk
+				if (lexerState->sourceCode[lexerState->charInd] == '*')
+				{
+					// check if next char is a '/'
+					if (lexerState->sourceCode[lexerState->charInd + 1] == '/')
+					{
+						// this is the end of the comment.
+						exit = 1;
+						
+						// move charInd to after the comment
+						// /* ... */ 
+						// _________^  this is where charIndex will now point
+						lexerState->charInd++;
+						lexerState->charInd++;
+						break;
+					}
+				}
+			}
+		}
+		// it is the slashsym
+		else
+		{
+			// TODO
+		}
+	}
+	
+	
     // TODO: Remove the below message after your implementation
     // Until implementing, let's just consume the current character and return.
-    char c = lexerState->sourceCode[lexerState->charInd];
+    //char c = lexerState->sourceCode[lexerState->charInd];
 
-    printf("DFA_Special: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
+    //printf("DFA_Special: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
 
     // The character was consumed (by ignoring). Advance to the next character.
-    lexerState->charInd++;
+    //lexerState->charInd++;
 
     return;
 }
