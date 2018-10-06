@@ -252,11 +252,6 @@ void DFA_Digit(LexerState* lexerState)
     // .. fields as required and use the following call:
     // addToken(&lexerState->tokenList, token);
 
-    /**
-     * TODO
-     * Implement this function
-     * */
-	
 	int i = 0, yesAlpha = 0, reservedToken;
 	char c, lexeme[MAX_LEXEME_LENGTH + 1];
 	
@@ -298,16 +293,14 @@ void DFA_Digit(LexerState* lexerState)
 		return;
 	}
 	
-    // TODO: Remove the below message after your implementation
-    // Until implementing, let's just consume the current character and return.
-    //char c = lexerState->sourceCode[lexerState->charInd];
-
-    //printf("DFA_Digit: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
-
-    // The character was consumed (by ignoring). Advance to the next character.
-    //lexerState->charInd++;
+	// create token
+	Token token;
+	token.id = identsym;
+	strcpy(token.lexeme, lexeme);
 	
-	
+	// add token to list
+	addToken(&lexerState->tokenList, token);
+		
     return;
 }
 
