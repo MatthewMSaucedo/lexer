@@ -174,10 +174,6 @@ void DFA_Alpha(LexerState* lexerState)
     // .. fields as required and use the following call:
     // addToken(&lexerState->tokenList, token);
 
-    /**
-     * TODO
-     * Implement this function
-     * */
 	int i = 0, reservedToken;
 	char c, lexeme[MAX_LEXEME_LENGTH + 1];
 	
@@ -197,13 +193,13 @@ void DFA_Alpha(LexerState* lexerState)
 	// terminate lexeme
 	lexeme[i] = '\0';
 	
-	// check is lexeme is less than 11 characters
+	// check is lexeme is greater than 11 characters
 	if ( i > 11)
-		{
-			// fill LexerState error and return
-			lexerState->lexerError = NAME_TOO_LONG;
-			return;
-		}
+	{
+		// fill LexerState error and return
+		lexerState->lexerError = NAME_TOO_LONG;
+		return;
+	}
 	
 	//check if lexeme is a reserved word
 	if (checkReservedTokens(lexeme))
@@ -260,16 +256,58 @@ void DFA_Digit(LexerState* lexerState)
      * TODO
      * Implement this function
      * */
-
+	
+	int i = 0, yesAlpha = 0, reservedToken;
+	char c, lexeme[MAX_LEXEME_LENGTH + 1];
+	
+	// while the next char is alphanumeric or a digit
+	// .. we must consider it as one lexeme
+	for (i = 1, c = lexerState->sourceCode[lexerState->charInd]; 
+		isalpha(c) || isdigit(c);
+		i++, c = lexerState->sourceCode[lexerState->charInd])
+	{
+		// increment charInd
+		lexerState->charInd++;
+			
+		// make note if character isalpha
+		if (isalpha(c))
+		{
+			yesAlpha = 1;
+		}
+		
+		// store as lexeme
+		lexeme[i-1] = c;
+	}
+	
+	// terminate lexeme
+	lexeme[i] = '\0';
+	
+	// check if lexeme is a well-formed number
+	if (yesAlpha)
+	{
+		// fill LexerState error and return
+		lexerState->lexerError = NONLETTER_VAR_INITIAL;
+		return;
+	}
+	
+	// check is lexeme is greater than 5 digits
+	if ( i > 5)
+	{
+		// fill LexerState error and return
+		lexerState->lexerError = NUM_TOO_LONG;
+		return;
+	}
+	
     // TODO: Remove the below message after your implementation
     // Until implementing, let's just consume the current character and return.
-    char c = lexerState->sourceCode[lexerState->charInd];
+    //char c = lexerState->sourceCode[lexerState->charInd];
 
-    printf("DFA_Digit: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
+    //printf("DFA_Digit: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
 
     // The character was consumed (by ignoring). Advance to the next character.
-    lexerState->charInd++;
-
+    //lexerState->charInd++;
+	
+	
     return;
 }
 
