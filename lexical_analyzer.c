@@ -178,7 +178,7 @@ void DFA_Alpha(LexerState* lexerState)
      * TODO
      * Implement this function
      * */
-	int i = 0;
+	int i = 0, reservedToken;
 	char c, lexeme[MAX_LEXEME_LENGTH + 1];
 	
 	// while the next char is alphanumeric or a digit
@@ -205,15 +205,30 @@ void DFA_Alpha(LexerState* lexerState)
 			return;
 		}
 	
+	//check if lexeme is a reserved word
+	if (checkReservedTokens(lexeme))
+	{
+		// save value of reserved token in tokens[] array
+		reservedToken = checkReservedTokens(lexeme);
 	
-	// TODO: Remove the below message after your implementation
-    // Until implementing, let's just consume the current character and return.
-    //char c = lexerState->sourceCode[lexerState->charInd];
-
-    //printf("DFA_Alpha: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
-
-    // The character was consumed (by ignoring). Advance to the next character.
-    lexerState->charInd++;
+		// create token
+		Token token;
+		token.id = reservedToken;
+		strcpy(token.lexeme, lexeme);
+		
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	else
+	{
+		// create token
+		Token token;
+		token.id = identsym;
+		strcpy(token.lexeme, lexeme);
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
 
     return;
 }
