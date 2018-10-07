@@ -322,15 +322,10 @@ void DFA_Special(LexerState* lexerState)
     // .. fields as required and use the following call:
     // addToken(&lexerState->tokenList, token);
 
-    /**
-     * TODO
-     * Implement this function
-     * */
+	int i = 0, exit = 0, reservedToken;
 	
-	int i = 1, exit = 0, reservedToken;
-	char c, lexeme[MAX_LEXEME_LENGTH + 1];
-	
-	
+	// check for the two character symbols
+	// check for /*
 	if (lexerState->sourceCode[lexerState->charInd] == '/')
 	{
 		//check to see if there is a following asterisk
@@ -357,7 +352,7 @@ void DFA_Special(LexerState* lexerState)
 						// _________^  this is where charIndex will now point
 						lexerState->charInd++;
 						lexerState->charInd++;
-						break;
+						return;
 					}
 				}
 			}
@@ -365,20 +360,228 @@ void DFA_Special(LexerState* lexerState)
 		// it is the slashsym
 		else
 		{
-			// TODO
+			// create token
+			Token token;
+			token.id = slashsym;
+			strcpy(token.lexeme, "/");
+	
+			// add token to list
+			addToken(&lexerState->tokenList, token);
 		}
 	}
+	// check for <= and <>
+	else if (lexerState->sourceCode[lexerState->charInd] == '<')
+	{
+		//check to see if there is a following =
+		if (lexerState->sourceCode[lexerState->charInd + 1] == '=')
+		{
+			// advance charInd
+			lexerState->charInd++;
+			
+			// create token
+			Token token;
+			token.id = leqsym;
+			strcpy(token.lexeme, "<=");
 	
+			// add token to list
+			addToken(&lexerState->tokenList, token);
+		}
+		else if (lexerState->sourceCode[lexerState->charInd + 1] == '>')
+		{
+			// advance charInd
+			lexerState->charInd++;
+			
+			// create token
+			Token token;
+			token.id = neqsym;
+			strcpy(token.lexeme, "<>");
 	
-    // TODO: Remove the below message after your implementation
-    // Until implementing, let's just consume the current character and return.
-    //char c = lexerState->sourceCode[lexerState->charInd];
-
-    //printf("DFA_Special: The character \'%c\' was seen and ignored. Please implement the function.\n", c);
-
-    // The character was consumed (by ignoring). Advance to the next character.
-    //lexerState->charInd++;
-
+			// add token to list
+			addToken(&lexerState->tokenList, token);
+		}
+		else
+		{
+			// create token
+			Token token;
+			token.id = lessym;
+			strcpy(token.lexeme, "<");
+	
+			// add token to list
+			addToken(&lexerState->tokenList, token);
+		}
+	}
+	// check for :=
+	else if (lexerState->sourceCode[lexerState->charInd] == ':')
+	{
+		// check to see if there is a following =
+		if (lexerState->sourceCode[lexerState->charInd + 1] == '=')
+		{
+			// advance charInd
+			lexerState->charInd++;
+			
+			// create token
+			Token token;
+			token.id = becomessym;
+			strcpy(token.lexeme, ":=");
+	
+			// add token to list
+			addToken(&lexerState->tokenList, token);
+		}
+		else
+		{
+			// invalid symbol :
+			
+			// create token
+			/*Token token;
+			token.id = sym;
+			strcpy(token.lexeme, ":");
+	
+			// add token to list
+			addToken(&lexerState->tokenList, token);
+			*/
+		}
+	}
+	// check for >=
+	else if (lexerState->sourceCode[lexerState->charInd] == '>')
+	{
+		// check to see if there is a following =
+		if (lexerState->sourceCode[lexerState->charInd + 1] == '=')
+		{
+			// advance charInd
+			lexerState->charInd++;
+			
+			// create token
+			Token token;
+			token.id = geqsym;
+			strcpy(token.lexeme, ">=");
+	
+			// add token to list
+			addToken(&lexerState->tokenList, token);
+		}
+		else
+		{
+			// create token
+			Token token;
+			token.id = gtrsym;
+			strcpy(token.lexeme, ">");
+	
+			// add token to list
+			addToken(&lexerState->tokenList, token);
+		}
+	}
+	// check for +
+	else if (lexerState->sourceCode[lexerState->charInd] == '+')
+	{
+		// create token
+		Token token;
+		token.id = plussym;
+		strcpy(token.lexeme, "+");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for )
+	else if (lexerState->sourceCode[lexerState->charInd] == ')')
+	{
+		// create token
+		Token token;
+		token.id = rparentsym;
+		strcpy(token.lexeme, ")");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for -
+	else if (lexerState->sourceCode[lexerState->charInd] == '-')
+	{
+		// create token
+		Token token;
+		token.id = minussym;
+		strcpy(token.lexeme, "-");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for =
+	else if (lexerState->sourceCode[lexerState->charInd] == '=')
+	{
+		// create token
+		Token token;
+		token.id = eqsym;
+		strcpy(token.lexeme, "=");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for ,
+	else if (lexerState->sourceCode[lexerState->charInd] == ',')
+	{
+		// create token
+		Token token;
+		token.id = commasym;
+		strcpy(token.lexeme, ",");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for * 
+	else if (lexerState->sourceCode[lexerState->charInd] == '*')
+	{
+		// create token
+		Token token;
+		token.id = multsym;
+		strcpy(token.lexeme, "*");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for ;
+	else if (lexerState->sourceCode[lexerState->charInd] == ';')
+	{
+		// create token
+		Token token;
+		token.id = semicolonsym;
+		strcpy(token.lexeme, ";");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for /
+	else if (lexerState->sourceCode[lexerState->charInd] == '/')
+	{
+		// create token
+		Token token;
+		token.id = slashsym;
+		strcpy(token.lexeme, "/");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for (
+	else if (lexerState->sourceCode[lexerState->charInd] == '(')
+	{
+		// create token
+		Token token;
+		token.id = lparentsym;
+		strcpy(token.lexeme, "(");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	// check for .
+	else if (lexerState->sourceCode[lexerState->charInd] == '.')
+	{
+		// create token
+		Token token;
+		token.id = periodsym;
+		strcpy(token.lexeme, ".");
+	
+		// add token to list
+		addToken(&lexerState->tokenList, token);
+	}
+	
+	lexerState->charInd++;
+	
     return;
 }
 
