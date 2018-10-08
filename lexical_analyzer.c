@@ -190,6 +190,9 @@ void DFA_Alpha(LexerState* lexerState)
 		lexeme[i-1] = c;
 	}
 	
+	// debug
+	i--;
+	
 	// terminate lexeme
 	lexeme[i] = '\0';
 	
@@ -202,7 +205,7 @@ void DFA_Alpha(LexerState* lexerState)
 	}
 	
 	//check if lexeme is a reserved word
-	if (checkReservedTokens(lexeme))
+	if (checkReservedTokens(lexeme) != -1)
 	{
 		// save value of reserved token in tokens[] array
 		reservedToken = checkReservedTokens(lexeme);
@@ -219,7 +222,7 @@ void DFA_Alpha(LexerState* lexerState)
 	{
 		// create token
 		Token token;
-		token.id = identsym;
+		token.id = 2;
 		strcpy(token.lexeme, lexeme);
 	
 		// add token to list
@@ -274,6 +277,9 @@ void DFA_Digit(LexerState* lexerState)
 		lexeme[i-1] = c;
 	}
 	
+	// debug
+	i--;
+	
 	// terminate lexeme
 	lexeme[i] = '\0';
 	
@@ -295,7 +301,7 @@ void DFA_Digit(LexerState* lexerState)
 	
 	// create token
 	Token token;
-	token.id = identsym;
+	token.id = 3;
 	strcpy(token.lexeme, lexeme);
 	
 	// add token to list
