@@ -186,8 +186,17 @@ void DFA_Alpha(LexerState* lexerState)
 		// increment charInd
 		lexerState->charInd++;
 			
-		// store as lexeme
-		lexeme[i-1] = c;
+		if (i-1 > MAX_LEXEME_LENGTH)
+		{
+			// fill LexerState error and return
+			lexerState->lexerError = NAME_TOO_LONG;
+			return;
+		}
+		else
+		{
+			// store as lexeme
+			lexeme[i-1] = c;
+		}
 	}
 	
 	// debug
@@ -273,8 +282,25 @@ void DFA_Digit(LexerState* lexerState)
 			yesAlpha = 1;
 		}
 		
-		// store as lexeme
-		lexeme[i-1] = c;
+		if (i-1 > MAX_LEXEME_LENGTH)
+		{
+			// fill LexerState error and return
+			lexerState->lexerError = NUM_TOO_LONG;
+			return;
+		}
+		else
+		{
+			// store as lexeme
+			lexeme[i-1] = c;
+		}
+		
+		// check if lexeme is a well-formed number
+		if (yesAlpha)
+		{
+			// fill LexerState error and return
+			lexerState->lexerError = NONLETTER_VAR_INITIAL;
+			return;
+		}
 	}
 	
 	// debug
@@ -282,14 +308,6 @@ void DFA_Digit(LexerState* lexerState)
 	
 	// terminate lexeme
 	lexeme[i] = '\0';
-	
-	// check if lexeme is a well-formed number
-	if (yesAlpha)
-	{
-		// fill LexerState error and return
-		lexerState->lexerError = NONLETTER_VAR_INITIAL;
-		return;
-	}
 	
 	// check is lexeme is greater than 5 digits
 	if ( i > 5)
